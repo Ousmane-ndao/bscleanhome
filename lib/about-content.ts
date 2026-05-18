@@ -42,8 +42,8 @@ export const aboutSections = [
       "Blanchisserie",
       "Maison & nettoyage pro",
     ],
-    image: "/images/maison-1.jpg",
-    imageAlt: "Nettoyage professionnel maison et textile",
+    image: "/images/services/nettoyage.png",
+    imageAlt: "Nettoyage professionnel maison et textile — BS-Consulting",
   },
   {
     id: "qualite",
@@ -55,8 +55,8 @@ export const aboutSections = [
       "Produits professionnels",
       "Satisfaction garantie",
     ],
-    image: "/images/products-meguiars.jpg",
-    imageAlt: "Équipe BS-Consulting — distributeur Meguiar's au Sénégal",
+    image: "/images/services/equipement-fictech.png",
+    imageAlt: "Équipement professionnel Fictech — BS-Consulting",
   },
 ] as const
 

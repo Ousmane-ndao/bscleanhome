@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ProductCartSheet } from "@/components/product-cart-sheet"
+import { ServiceImageGallery, ServiceThumb } from "@/components/service-image-gallery"
 import { SiteFooter } from "@/components/site-footer"
 import dynamic from "next/dynamic"
 
@@ -20,7 +21,12 @@ const ProductsCatalog = dynamic(
 )
 import { useCart } from "@/hooks/use-cart"
 import { formatPrice } from "@/lib/format"
-import { getServiceId, serviceCatalog } from "@/lib/service-catalog"
+import {
+  getCategoryCoverImage,
+  getCategoryGallery,
+  getServiceId,
+  serviceCatalog,
+} from "@/lib/service-catalog"
 import { 
   Car, 
   Sofa,
@@ -39,14 +45,12 @@ import {
   Shirt,
   BedDouble,
   Layers,
-  ChevronLeft,
-  ChevronRight,
   Award,
   Clock,
   Shield,
   ShoppingCart,
 } from "lucide-react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import Link from "next/link"
 import Image from "next/image"
 
@@ -55,67 +59,60 @@ const serviceCategories = [
     id: "auto",
     icon: Car,
     title: "Lavage automobile",
-    images: ["/images/atelier-consulting-auto.jpg", "/images/auto-1.jpg", "/images/auto-2.jpg", "/images/auto-3.jpg"],
     description:
       "Lavage extérieur, intérieur, complet, moteur, polish et traitement de protection automobile.",
     services: serviceCatalog.auto,
-    color: "from-blue-600 to-blue-800"
+    color: "from-blue-600 to-blue-800",
   },
   {
     id: "canape",
     icon: Sofa,
     title: "Nettoyage canapé",
-    images: ["/images/canape-1.jpg", "/images/canape-2.jpg", "/images/canape-3.jpg"],
     description: "Nettoyage professionnel de canapés tissu et cuir avec traitement anti-taches.",
     services: serviceCatalog.canape,
-    color: "from-amber-500 to-orange-600"
+    color: "from-amber-500 to-orange-600",
   },
   {
     id: "tapis",
     icon: Layers,
     title: "Lavage Tapis",
-    images: ["/images/tapis-1.jpg", "/images/tapis-2.jpg", "/images/tapis-3.jpg"],
     description: "Nettoyage en profondeur de tapis modernes, traditionnels et moquettes.",
     services: serviceCatalog.tapis,
-    color: "from-emerald-500 to-teal-600"
+    color: "from-emerald-500 to-teal-600",
   },
   {
     id: "matelas",
     icon: BedDouble,
     title: "Nettoyage Matelas",
-    images: ["/images/matelas-1.jpg", "/images/matelas-2.jpg", "/images/matelas-3.jpg"],
     description: "Désinfection et nettoyage vapeur pour un sommeil sain.",
     services: serviceCatalog.matelas,
-    color: "from-violet-500 to-purple-600"
+    color: "from-violet-500 to-purple-600",
   },
   {
     id: "blanchisserie",
     icon: Shirt,
     title: "Blanchisserie",
-    images: ["/images/blanchisserie-1.jpg", "/images/blanchisserie-2.jpg", "/images/blanchisserie-3.jpg"],
     description: "Lavage, repassage et nettoyage à sec de qualité professionnelle.",
     services: serviceCatalog.blanchisserie,
-    color: "from-sky-500 to-cyan-600"
+    color: "from-sky-500 to-cyan-600",
   },
   {
     id: "maison",
     icon: Home,
     title: "Nettoyage Maison",
-    images: ["/images/maison-1.jpg", "/images/maison-2.jpg", "/images/maison-3.jpg"],
     description: "Entretien complet de votre maison avec produits professionnels.",
     services: serviceCatalog.maison,
-    color: "from-rose-500 to-pink-600"
+    color: "from-rose-500 to-pink-600",
   },
   {
     id: "pro",
     icon: Building2,
     title: "Nettoyage Pro",
-    images: ["/images/pro-1.jpg", "/images/pro-2.jpg", "/images/pro-3.jpg"],
     description: "Solutions sur mesure pour entreprises et espaces commerciaux.",
     services: serviceCatalog.pro,
-    color: "from-slate-600 to-slate-800"
-  }
-]
+    color: "from-slate-600 to-slate-800",
+  },
+] as const
 
 const featureHighlights = [
   {
@@ -158,75 +155,10 @@ const trainingTopics = [
   "Lavage compartiment moteur"
 ]
 
-function ImageGallery({ images, title }: { images: string[], title: string }) {
-  const [currentIndex, setCurrentIndex] = useState(0)
-
-  const nextImage = () => {
-    setCurrentIndex((prev) => (prev + 1) % images.length)
-  }
-
-  const prevImage = () => {
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length)
-  }
-
-  const currentSrc = images[currentIndex] ?? images[0]
-
-  return (
-    <div className="group relative aspect-[16/10] overflow-hidden rounded-2xl sm:aspect-[4/3] bg-muted">
-      <Image
-        key={currentSrc}
-        src={currentSrc}
-        alt={`${title} ${currentIndex + 1}`}
-        fill
-        sizes="(max-width:1024px) 100vw, 50vw"
-        quality={75}
-        loading="lazy"
-        className="object-cover object-center transition-opacity duration-500"
-      />
-
-      {/* Overlay gradient */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-      
-      {/* Navigation arrows */}
-      <button 
-        type="button"
-        onClick={prevImage}
-        aria-label="Image précédente"
-        className="absolute left-3 sm:left-4 top-1/2 z-[2] -translate-y-1/2 w-11 h-11 rounded-full bg-white/25 backdrop-blur-md flex items-center justify-center text-white shadow-lg transition-all hover:bg-white/35 active:scale-95 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 focus-visible:opacity-100"
-      >
-        <ChevronLeft className="w-5 h-5" aria-hidden />
-      </button>
-      <button 
-        type="button"
-        onClick={nextImage}
-        aria-label="Image suivante"
-        className="absolute right-3 sm:right-4 top-1/2 z-[2] -translate-y-1/2 w-11 h-11 rounded-full bg-white/25 backdrop-blur-md flex items-center justify-center text-white shadow-lg transition-all hover:bg-white/35 active:scale-95 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 focus-visible:opacity-100"
-      >
-        <ChevronRight className="w-5 h-5" aria-hidden />
-      </button>
-      
-      {/* Dots indicator */}
-      <div className="absolute bottom-4 left-1/2 z-[2] -translate-x-1/2 flex items-center gap-2">
-        {images.map((_, i) => (
-          <button
-            type="button"
-            key={i}
-            onClick={() => setCurrentIndex(i)}
-            aria-label={`Image ${i + 1} sur ${images.length}`}
-            aria-current={i === currentIndex ? true : undefined}
-            className={`h-2 rounded-full transition-all ${
-              i === currentIndex ? "bg-white w-6" : "w-2 bg-white/50 hover:bg-white/70"
-            }`}
-          />
-        ))}
-      </div>
-    </div>
-  )
-}
-
 export default function HomePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeCategory, setActiveCategory] = useState("auto")
+  const [highlightedService, setHighlightedService] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
   const cart = useCart()
 
@@ -237,7 +169,21 @@ export default function HomePage() {
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
-  const activeService = serviceCategories.find(cat => cat.id === activeCategory)
+  const activeService = serviceCategories.find((cat) => cat.id === activeCategory)
+
+  const activeGalleryImages = useMemo(() => {
+    if (!activeService) return []
+    const gallery = getCategoryGallery(activeService.id)
+    if (!highlightedService) return gallery
+    const entry = activeService.services.find((s) => s.name === highlightedService)
+    if (!entry?.image) return gallery
+    return [entry.image, ...gallery.filter((src) => src !== entry.image)]
+  }, [activeService, highlightedService])
+
+  const selectCategory = (categoryId: string) => {
+    setActiveCategory(categoryId)
+    setHighlightedService(null)
+  }
 
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
@@ -554,7 +500,7 @@ export default function HomePage() {
           <div className="mb-10 grid gap-4 sm:grid-cols-2">
             <button
               type="button"
-              onClick={() => setActiveCategory("auto")}
+              onClick={() => selectCategory("auto")}
               className={`group relative overflow-hidden rounded-2xl border-2 text-left shadow-md transition-all ${
                 activeCategory === "auto"
                   ? "border-primary ring-2 ring-primary/20"
@@ -568,7 +514,8 @@ export default function HomePage() {
                   fill
                   className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
                   sizes="(max-width:640px) 100vw, 50vw"
-                  quality={90}
+                  quality={70}
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent" />
               </div>
@@ -581,7 +528,7 @@ export default function HomePage() {
 
             <button
               type="button"
-              onClick={() => setActiveCategory("maison")}
+              onClick={() => selectCategory("maison")}
               className={`group relative overflow-hidden rounded-2xl border-2 text-left shadow-md transition-all ${
                 activeCategory === "maison"
                   ? "border-primary ring-2 ring-primary/20"
@@ -595,7 +542,8 @@ export default function HomePage() {
                   fill
                   className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
                   sizes="(max-width:640px) 100vw, 50vw"
-                  quality={90}
+                  quality={70}
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent" />
               </div>
@@ -614,7 +562,7 @@ export default function HomePage() {
               <button
                 key={cat.id}
                 type="button"
-                onClick={() => setActiveCategory(cat.id)}
+                onClick={() => selectCategory(cat.id)}
                 className={`flex shrink-0 items-center gap-2 px-5 py-3 rounded-full transition-all duration-300 ${
                   activeCategory === cat.id 
                     ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25" 
@@ -632,7 +580,11 @@ export default function HomePage() {
           {activeService && (
             <div className="mb-8 grid gap-6 lg:grid-cols-2 lg:items-start">
               {/* Image Gallery */}
-              <ImageGallery images={activeService.images} title={activeService.title} />
+              <ServiceImageGallery
+                key={`${activeService.id}-${highlightedService ?? "all"}`}
+                images={activeGalleryImages}
+                title={activeService.title}
+              />
               
               {/* Service Info */}
               <div className="rounded-2xl border border-border bg-background p-5 shadow-sm sm:p-6">
@@ -661,15 +613,23 @@ export default function HomePage() {
                   {activeService.services.map((service) => (
                     <li
                       key={service.name}
-                      className="flex flex-col gap-2 rounded-lg border border-border/60 bg-muted/30 p-2.5 text-sm sm:flex-row sm:items-center"
+                      className={`flex flex-col gap-2 rounded-lg border p-2.5 text-sm transition-colors sm:flex-row sm:items-center ${
+                        highlightedService === service.name
+                          ? "border-primary bg-primary/5 ring-1 ring-primary/20"
+                          : "border-border/60 bg-muted/30"
+                      }`}
                     >
-                      <div className="flex min-w-0 flex-1 items-start gap-2">
-                        <CheckCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-secondary" aria-hidden />
-                        <div className="min-w-0">
+                      <button
+                        type="button"
+                        onClick={() => setHighlightedService(service.name)}
+                        className="flex min-w-0 flex-1 items-start gap-2.5 text-left"
+                      >
+                        <ServiceThumb src={service.image} alt={service.name} />
+                        <div className="min-w-0 flex-1">
                           <span className="block leading-snug text-foreground">{service.name}</span>
                           <span className="text-xs font-semibold text-secondary">{formatPrice(service.price)}</span>
                         </div>
-                      </div>
+                      </button>
                       <Button
                         type="button"
                         size="sm"
@@ -713,16 +673,17 @@ export default function HomePage() {
                     ? "ring-2 ring-primary shadow-xl" 
                     : "hover:shadow-lg"
                 }`}
-                onClick={() => setActiveCategory(category.id)}
+                onClick={() => selectCategory(category.id)}
               >
                 <div className="relative aspect-[4/3] overflow-hidden bg-muted">
                   <Image
-                    src={category.images[0]}
+                    src={getCategoryCoverImage(category.id)}
                     alt={category.title}
                     fill
                     className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
                     sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 25vw"
-                    quality={90}
+                    quality={65}
+                    loading="lazy"
                   />
                 </div>
                 <div className="flex items-center gap-3 border-t border-border bg-card p-4">
