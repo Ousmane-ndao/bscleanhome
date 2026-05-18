@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "À propos — BS-Consulting",
+  title: "À propos",
   description:
     "BS-Consulting : lavage automobile à domicile, detailing, formations Meguiar's, nettoyage canapé, tapis, matelas, blanchisserie et entretien professionnel au Sénégal.",
 }

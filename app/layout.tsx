@@ -14,26 +14,20 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'BS Consulting — Nettoyage professionnel & Meguiar’s au Sénégal',
+  title: {
+    default: 'BS Consulting',
+    template: '%s | BS Consulting',
+  },
   description:
     "Lavage auto, nettoyage canapé, tapis, matelas, blanchisserie et entretien pro à Dakar. Distributeur Meguiar's, devis et formation detailing.",
-  generator: 'v0.app',
+  applicationName: 'BS Consulting',
   icons: {
     icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/images/logo-bs-consulting-transparent.png', type: 'image/png' },
     ],
     apple: '/apple-icon.png',
+    shortcut: '/favicon-32x32.png',
   },
 }
 
