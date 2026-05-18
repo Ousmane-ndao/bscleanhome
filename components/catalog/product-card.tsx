@@ -69,7 +69,7 @@ export function ProductCard({ product, index, onAddToCart }: ProductCardProps) {
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-secondary to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
-      <div className="relative aspect-[5/4] w-full max-h-[168px] shrink-0 overflow-hidden bg-gradient-to-b from-muted/50 via-background to-muted/30 sm:max-h-[180px]">
+      <div className="relative aspect-[4/3] w-full min-h-[190px] shrink-0 overflow-hidden bg-gradient-to-b from-muted/40 via-white to-muted/20 sm:min-h-[200px]">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,var(--color-secondary)/0.08,transparent_60%)]" />
 
         {product.badge && (
@@ -84,15 +84,15 @@ export function ProductCard({ product, index, onAddToCart }: ProductCardProps) {
           </span>
         </div>
 
-        <div className="relative flex h-full w-full items-center justify-center p-3 sm:p-4">
+        <div className="relative flex h-full w-full items-center justify-center p-1 sm:p-1.5">
           <Image
             src={product.image}
             alt={product.name}
             fill
             loading="lazy"
-            quality={75}
-            className="object-contain object-center p-2 transition-transform duration-700 ease-out group-hover:scale-105"
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            quality={92}
+            className="object-contain object-center scale-[1.22] transition-transform duration-500 ease-out group-hover:scale-[1.32]"
+            sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 320px"
           />
         </div>
       </div>
