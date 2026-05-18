@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculatrice Simple</title>
+</head>
+<body>
+    <h1>Calculatrice Simple</h1>
+    <input type="number" id="premier-nombre" placeholder="Premier nombre">
+    <input type="number" id="deuxieme-nombre" placeholder="Deuxième nombre">
+    
+    <select id="operation">
+        <option value="addition">Addition</option>
+        <option value="soustraction">Soustraction</option>
+        <option value="multiplication">Multiplication</option>
+        <option value="division">Division</option>
+    </select>
+    
+    <input type="text" id="resultat" placeholder="Résultat" readonly>
+    <button id="mon-bouton">Calculer</button>
+
+    <script>
+        document.getElementById('mon-bouton').addEventListener('click', function() {
+            const premierNombre = parseFloat(document.getElementById('premier-nombre').value);
+            const deuxiemeNombre = parseFloat(document.getElementById('deuxieme-nombre').value);
+            const operation = document.getElementById('operation').value;
+            let resultat;
+
+            if (isNaN(premierNombre) || isNaN(deuxiemeNombre)) {
+                resultat = "Veuillez entrer des nombres valides";
+            } else {
+                switch (operation) {
+                    case 'addition':
+                        resultat = premierNombre + deuxiemeNombre;
+                        break;
+                    case 'soustraction':
+                        resultat = premierNombre - deuxiemeNombre;
+                        break;
+                    case 'multiplication':
+                        resultat = premierNombre * deuxiemeNombre;
+                        break;
+                    case 'division':
+                        resultat = deuxiemeNombre !== 0 ? premierNombre / deuxiemeNombre : "Erreur: Division par zéro";
+                        break;
+                }
+            }
+
+            document.getElementById('resultat').value = resultat;
+        });
+    </script>
+</body>
+</html>
