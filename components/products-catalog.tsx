@@ -27,14 +27,14 @@ export function ProductsCatalog({
         aria-hidden
       />
 
-      <div className="relative mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border/50 bg-card/80 px-4 py-3 shadow-sm backdrop-blur-sm sm:px-5">
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 shadow-md">
-            <Sparkles className="h-4 w-4 text-primary-foreground" aria-hidden />
+      <div className="relative mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border/50 bg-card/80 px-3 py-2.5 shadow-sm backdrop-blur-sm sm:px-4">
+        <div className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/80 shadow-md">
+            <Sparkles className="h-3.5 w-3.5 text-primary-foreground" aria-hidden />
           </div>
           <div>
-            <p className="text-sm font-bold text-foreground">BSClean Services</p>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs font-bold text-foreground sm:text-sm">BSClean Services</p>
+            <p className="text-[10px] text-muted-foreground sm:text-xs">
               {displayProducts.length} produits professionnels · detailing & entretien auto
             </p>
           </div>
@@ -46,7 +46,7 @@ export function ProductsCatalog({
         )}
       </div>
 
-      <div className="grid auto-rows-fr gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid auto-rows-fr gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
         {displayProducts.map((product, index) => (
           <ProductCard
             key={product.id}
@@ -57,7 +57,7 @@ export function ProductsCatalog({
         ))}
       </div>
 
-      <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+      <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
         {cartCount > 0 && (
           <Button
             type="button"

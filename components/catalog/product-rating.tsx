@@ -23,7 +23,7 @@ export function ProductRating({ rating, reviewCount, className }: ProductRatingP
             <Star
               key={i}
               className={cn(
-                "h-3.5 w-3.5 sm:h-4 sm:w-4",
+                "h-3 w-3 sm:h-3.5 sm:w-3.5",
                 filled
                   ? "fill-secondary text-secondary"
                   : "fill-muted text-muted-foreground/25"

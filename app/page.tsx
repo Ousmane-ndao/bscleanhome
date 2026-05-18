@@ -12,7 +12,7 @@ const ProductsCatalog = dynamic(
     loading: () => (
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:gap-5">
         {Array.from({ length: 8 }).map((_, i) => (
-          <div key={i} className="h-[420px] animate-pulse rounded-2xl bg-muted/80" />
+          <div key={i} className="h-[340px] animate-pulse rounded-xl bg-muted/80" />
         ))}
       </div>
     ),

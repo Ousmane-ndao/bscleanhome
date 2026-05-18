@@ -5,21 +5,37 @@ __v0_jsx-dev-runtime.ts
 .snowflake/
 .v0-trash/
 .vercel/
+
 # IDE
 .idea/
 *.iml
 
-# Node
+# Node / Next.js
 node_modules/
+.next/
 dist/
 build/
+out/
 
 # Env
 .env
-# Environment variables
 .env*.local
 
-# Common ignores
-node_modules
-.next/
+# OS
 .DS_Store
+Thumbs.db
+
+# Ancien dossier styles (non utilisé par Next.js)
+/styles/
+
+# Autres projets locaux (ne pas versionner dans ce dépôt)
+/cours-en-ligne/
+/FinalSA/
+/ma-creme-senedindia/
+/moven/
+/projetDer/
+/ProjetFinaljs/
+/SA1/
+/SEN_AUTO/
+/flutter2/
+/lastTestERP/
