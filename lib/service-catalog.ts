@@ -31,8 +31,8 @@ const serviceImages = {
 
 export const serviceCatalog: Record<string, ServiceEntry[]> = {
   auto: [
-    { name: "Lavage extérieur", price: 5_000, image: serviceImages.exterior },
-    { name: "Lavage intérieur", price: 7_500, image: serviceImages.interior },
+    { name: "Lavage extérieur", price: 3_000, image: serviceImages.exterior },
+    { name: "Lavage intérieur", price: 3_000, image: serviceImages.interior },
     { name: "Lavage complet", price: 12_000, image: serviceImages.lavage },
     { name: "Nettoyage moteur", price: 10_000, image: serviceImages.engine },
     { name: "Polish carrosserie", price: 25_000, image: serviceImages.paint },
@@ -73,14 +73,14 @@ export const serviceCatalog: Record<string, ServiceEntry[]> = {
     { name: "Pliage vêtements", price: 1_000, image: serviceImages.laundry },
   ],
   maison: [
-    { name: "Nettoyage complet maison", price: 75_000, image: serviceImages.house },
-    { name: "Nettoyage après chantier", price: 90_000, image: "/images/maison-1.jpg" },
-    { name: "Nettoyage après déménagement", price: 85_000, image: "/images/maison-2.jpg" },
-    { name: "Nettoyage cuisine", price: 25_000, image: "/images/maison-3.jpg" },
-    { name: "Nettoyage salle de bain", price: 20_000, image: serviceImages.nettoyage },
-    { name: "Nettoyage vitres", price: 18_000, image: serviceImages.glass },
-    { name: "Désinfection maison", price: 35_000, image: serviceImages.nettoyage },
-    { name: "Nettoyage bureaux", price: 40_000, image: serviceImages.office },
+    { name: "Nettoyage complet maison", minPrice: 15_000, maxPrice: 25_000, image: serviceImages.house },
+    { name: "Nettoyage après chantier", minPrice: 35_000, maxPrice: 70_000, image: "/images/maison-1.jpg" },
+    { name: "Nettoyage après déménagement", minPrice: 35_000, maxPrice: 85_000, image: "/images/maison-2.jpg" },
+    { name: "Nettoyage cuisine", minPrice: 15_000, maxPrice: 25_000, image: "/images/maison-3.jpg" },
+    { name: "Nettoyage salle de bain", minPrice: 10_000, maxPrice: 20_000, image: serviceImages.nettoyage },
+    { name: "Nettoyage vitres", minPrice: 10_000, maxPrice: 20_000, image: serviceImages.glass },
+    { name: "Désinfection maison", minPrice: 15_000, maxPrice: 35_000, image: serviceImages.nettoyage },
+    { name: "Nettoyage bureaux", minPrice: 20_000, maxPrice: 40_000, image: serviceImages.office },
   ],
   pro: [
     { name: "Nettoyage bureaux", price: 50_000, image: serviceImages.office },

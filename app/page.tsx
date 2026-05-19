@@ -580,7 +580,7 @@ export default function HomePage() {
 
           {/* Active Service Detail */}
           {activeService && (
-            <div className="mb-8 grid gap-6 lg:grid-cols-2 lg:items-start">
+            <div className="mb-8 grid gap-6 lg:grid-cols-2">
               {/* Image Gallery */}
               <ServiceImageGallery
                 key={`${activeService.id}-${highlightedService ?? "all"}`}

@@ -57,7 +57,7 @@ export function ServiceImageGallery({ images, title }: ServiceImageGalleryProps)
 
   return (
     <div
-      className="group relative aspect-[16/10] overflow-hidden rounded-2xl sm:aspect-[4/3] bg-muted"
+      className="group relative overflow-hidden rounded-2xl bg-muted aspect-[16/10] sm:aspect-[4/3] lg:aspect-auto lg:h-full"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocusCapture={() => setIsPaused(true)}
