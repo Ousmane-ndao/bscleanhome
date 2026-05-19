@@ -1,6 +1,8 @@
 export type ServiceEntry = {
   name: string
-  price: number
+  price?: number
+  minPrice?: number
+  maxPrice?: number
   image: string
 }
 
@@ -39,12 +41,12 @@ export const serviceCatalog: Record<string, ServiceEntry[]> = {
     { name: "Nettoyage sièges tissu/cuir", price: 15_000, image: serviceImages.interior },
   ],
   canape: [
-    { name: "Nettoyage canapé tissu", price: 12_000, image: serviceImages.sofa },
-    { name: "Nettoyage canapé cuir", price: 15_000, image: serviceImages.sofa },
-    { name: "Shampoing canapé", price: 10_000, image: "/images/canape-1.jpg" },
+    { name: "Nettoyage canapé tissu", minPrice: 9_000, maxPrice: 15_000, image: serviceImages.sofa },
+    { name: "Nettoyage canapé cuir", minPrice: 10_000, maxPrice: 15_000, image: serviceImages.sofa },
+    { name: "Shampoing canapé", minPrice: 9_000, maxPrice: 15_000, image: "/images/canape-1.jpg" },
     { name: "Désinfection canapé", price: 8_000, image: "/images/canape-2.jpg" },
-    { name: "Élimination des taches", price: 7_000, image: "/images/canape-3.jpg" },
-    { name: "Traitement anti-odeur", price: 6_000, image: serviceImages.nettoyage },
+    { name: "Élimination des taches", minPrice: 7_000, maxPrice: 15_000, image: "/images/canape-3.jpg" },
+    { name: "Traitement anti-odeur", minPrice: 6_000, maxPrice: 10_000, image: serviceImages.nettoyage },
   ],
   tapis: [
     { name: "Lavage tapis moderne", price: 8_000, image: serviceImages.carpet },

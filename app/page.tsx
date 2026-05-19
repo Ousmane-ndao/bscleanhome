@@ -21,6 +21,7 @@ const ProductsCatalog = dynamic(
 )
 import { useCart } from "@/hooks/use-cart"
 import { formatPrice } from "@/lib/format"
+import type { ServiceEntry } from "@/lib/service-catalog"
 import {
   getCategoryCoverImage,
   getCategoryGallery,
@@ -160,6 +161,7 @@ export default function HomePage() {
   const [activeCategory, setActiveCategory] = useState("auto")
   const [highlightedService, setHighlightedService] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
+  const [selectedServicePrices, setSelectedServicePrices] = useState<Record<string, number>>({})
   const cart = useCart()
 
   useEffect(() => {
@@ -610,45 +612,81 @@ export default function HomePage() {
                 </div>
                 
                 <ul className="mb-5 grid grid-cols-1 gap-2 sm:grid-cols-2">
-                  {activeService.services.map((service) => (
-                    <li
-                      key={service.name}
-                      className={`flex flex-col gap-2 rounded-lg border p-2.5 text-sm transition-colors sm:flex-row sm:items-center ${
-                        highlightedService === service.name
-                          ? "border-primary bg-primary/5 ring-1 ring-primary/20"
-                          : "border-border/60 bg-muted/30"
-                      }`}
-                    >
-                      <button
-                        type="button"
-                        onClick={() => setHighlightedService(service.name)}
-                        className="flex min-w-0 flex-1 items-start gap-2.5 text-left"
+                  {activeService.services.map((service) => {
+                    const serviceId = getServiceId(activeService.id, service.name)
+                    const hasRange = service.minPrice !== undefined && service.maxPrice !== undefined
+                    const rangeMin: number = service.minPrice ?? 0
+                    const rangeMax: number = service.maxPrice ?? 0
+                    const selectedPrice: number = hasRange
+                      ? selectedServicePrices[serviceId] ?? rangeMin
+                      : service.price ?? 0
+
+                    return (
+                      <li
+                        key={service.name}
+                        className={`flex flex-col gap-2 rounded-lg border p-2.5 text-sm transition-colors sm:flex-row sm:items-center ${
+                          highlightedService === service.name
+                            ? "border-primary bg-primary/5 ring-1 ring-primary/20"
+                            : "border-border/60 bg-muted/30"
+                        }`}
                       >
-                        <ServiceThumb src={service.image} alt={service.name} />
-                        <div className="min-w-0 flex-1">
-                          <span className="block leading-snug text-foreground">{service.name}</span>
-                          <span className="text-xs font-semibold text-secondary">{formatPrice(service.price)}</span>
+                        <div className="flex min-w-0 flex-1 flex-col gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setHighlightedService(service.name)}
+                            className="flex min-w-0 items-start gap-2.5 text-left"
+                          >
+                            <ServiceThumb src={service.image} alt={service.name} />
+                            <div className="min-w-0 flex-1">
+                              <span className="block leading-snug text-foreground">{service.name}</span>
+                              <span className="text-xs font-semibold text-secondary">
+                                {hasRange
+                                  ? `${formatPrice(rangeMin)} – ${formatPrice(rangeMax)}`
+                                  : formatPrice(service.price ?? 0)}
+                              </span>
+                            </div>
+                          </button>
+
+                          {hasRange ? (
+                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                              <span>Choisir le prix :</span>
+                              <select
+                                value={selectedPrice}
+                                onChange={(event) =>
+                                  setSelectedServicePrices((prev) => ({
+                                    ...prev,
+                                    [serviceId]: Number(event.target.value),
+                                  }))
+                                }
+                                className="rounded-md border border-border bg-background px-2 py-1 text-xs"
+                              >
+                                <option value={rangeMin}>{formatPrice(rangeMin)}</option>
+                                <option value={rangeMax}>{formatPrice(rangeMax)}</option>
+                              </select>
+                            </div>
+                          ) : null}
                         </div>
-                      </button>
-                      <Button
-                        type="button"
-                        size="sm"
-                        className="h-8 shrink-0 rounded-full bg-secondary px-3 text-xs text-secondary-foreground hover:bg-secondary/90"
-                        onClick={() =>
-                          cart.addService({
-                            id: getServiceId(activeService.id, service.name),
-                            name: service.name,
-                            categoryId: activeService.id,
-                            categoryTitle: activeService.title,
-                            price: service.price,
-                          })
-                        }
-                      >
-                        <ShoppingCart className="mr-1 h-3 w-3" aria-hidden />
-                        Commander
-                      </Button>
-                    </li>
-                  ))}
+
+                        <Button
+                          type="button"
+                          size="sm"
+                          className="h-8 shrink-0 rounded-full bg-secondary px-3 text-xs text-secondary-foreground hover:bg-secondary/90"
+                          onClick={() =>
+                            cart.addService({
+                              id: `${serviceId}-${selectedPrice}`,
+                              name: service.name,
+                              categoryId: activeService.id,
+                              categoryTitle: activeService.title,
+                              price: selectedPrice,
+                            })
+                          }
+                        >
+                          <ShoppingCart className="mr-1 h-3 w-3" aria-hidden />
+                          Commander
+                        </Button>
+                      </li>
+                    )
+                  })}
                 </ul>
                 
                 <Button
